@@ -1,0 +1,74 @@
+	.file	"fsubr.c"
+	.text
+	.globl	subtract
+	.type	subtract, @function
+subtract:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movss	%xmm0, -20(%rbp)
+	movss	%xmm1, -24(%rbp)
+	pxor	%xmm0, %xmm0
+	movss	%xmm0, -4(%rbp)
+	movss	-20(%rbp), %xmm0
+	flds	-24(%rbp)
+	movss	%xmm0, -28(%rbp)
+	flds	-28(%rbp)
+#APP
+# 6 "fsubr.c" 1
+	fsubr %st(1), %st
+# 0 "" 2
+#NO_APP
+	fstp	%st(1)
+	fstps	-4(%rbp)
+	movss	-4(%rbp), %xmm0
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	subtract, .-subtract
+	.section	.rodata
+.LC4:
+	.string	"%f"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB1:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$16, %rsp
+	movss	.LC2(%rip), %xmm1
+	movss	.LC3(%rip), %xmm0
+	call	subtract
+	movd	%xmm0, %eax
+	movl	%eax, -4(%rbp)
+	cvtss2sd	-4(%rbp), %xmm0
+	leaq	.LC4(%rip), %rdi
+	movl	$1, %eax
+	call	printf@PLT
+	nop
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE1:
+	.size	main, .-main
+	.section	.rodata
+	.align 4
+.LC2:
+	.long	1068708659
+	.align 4
+.LC3:
+	.long	1085485875
+	.ident	"GCC: (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0"
+	.section	.note.GNU-stack,"",@progbits
